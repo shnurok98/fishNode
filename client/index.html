@@ -1,0 +1,61 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Puziriki</title>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="JQueryRotate.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="aquarium">
+        
+        <div class="score_box">
+            <h3 id="available_clicks">Clicks: 10</h3>
+            <h3 id="score" style="float: right;">Score: <b>0</b></h3>
+        </div>
+        <div class="end_game">
+            <h1>Game over!</h1>
+            <h2 id="final_score"></h2>
+            <div class="reboot" onclick="startGame(0)">
+                <h2>Next One!</h2>
+            </div>
+            <div class="scores">
+                <h3>Your scores:</h3>
+                <table>
+                </table>
+            </div>
+        </div>
+        
+        <div class="null">
+            
+        </div>
+
+        <div class="armor">
+            
+        </div>
+
+        <div class="start">
+            <!-- <h2>Start</h2> -->
+            <form name="userForm" id="userForm">
+                <input type="text" name="name" placeholder="Ваше имя" id="nameId">
+                <button type="button" onclick="startGame(1)">Клац</button>
+            </form>
+        </div>
+
+        <p class="fish f1" style="top: 3px; left: 10px;"></p>
+        <p class="fish f2" style="top: 300px; left: 1000px;"></p>
+        <p class="fish f3" style="top: 400px; left: 500px;"></p>
+        <p class="fish f4" style="top: 3px; left: 10px;"></p>
+        <p class="fish f5" style="top: 300px; left: 1000px;"></p>
+        <p class="fish f6" style="top: 400px; left: 500px;"></p>
+        <p class="fish f7" style="top: 400px; left: 500px;"></p>
+
+    </div>
+</body>
+
+</html>

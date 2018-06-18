@@ -1,0 +1,95 @@
+body{
+    margin: 0 0;
+}
+.null{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.armor{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.aquarium{
+    background-image: url(img/aquarium.jpg);
+    background-size: 100%;
+    width: 100%;
+    height: 100%;
+}
+.bubble{
+    display: inline-block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid white;
+    border-radius: 50%;
+    margin: 0 0;
+}
+.score_box{
+    display: none;
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    border: 3px solid black;
+    width: 250px;
+    height: 55px;
+    background-color: #373E47FF;
+    z-index: 100;
+}
+.score_box h3{
+    display: inline-block;
+    margin: 15px 15px;
+}
+
+.start{
+    margin: 0 auto;
+    position: relative;
+    top: 150px;
+    border: 3px solid black;
+    width: 250px;
+    height: 55px;
+    text-align: center;
+    background-color: #0026FF80;
+    cursor: pointer;
+}
+
+
+.end_game{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0, 0.5);
+    z-index: 100;
+}
+
+.reboot{
+    display: inline-block;
+    border: 1px dashed white;
+    background-color: rgba(255,255,255, 0.35);
+    cursor: pointer;
+    width: 210px;
+    margin-bottom: 20px;
+}
+
+.fish{
+    display: none;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-image: url(img/fish.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    margin: 0 0;
+    cursor: pointer;
+}
+
+.scores{
+    width: 500px;
+    margin: 0 auto;
+    display: block;
+    border: 1px dashed white;
+    background-color: rgba(255,255,255, 0.35);
+}
