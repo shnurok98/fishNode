@@ -1,14 +1,6 @@
 let config = {};
 
 // config.connectionString = {
-// 	host: 'localhost',
-// 	port: 5432,
-// 	database: 'postgres',
-// 	user: 'postgres',
-// 	password: '62650205'
-// };
-
-// config.connectionString = {
 // 	host: '192.168.1.250',
 // 	port: 5432,
 // 	database: 's161342_16',
