@@ -1,76 +1,63 @@
-let human = {'id': 0, 'name': 'default'};
+let human;
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-async function onGetUserByName(){
-	try{
-		let name = $('#nameId').val();
-		let res = await fetch(`http://192.168.3.121:3000/users/filter/${name}`);
-		let data = await res.json();
-
-		human.id = data.id;
-		human.name = data.name;
-	}catch(err){
-		onCreateUser();
-		//console.log(err);
+class User{
+	constructor(obj){
+		for(let key in obj){
+			this[key] = obj[key];
+		}
 	}
-}
 
-async function onCreateUser(){
-	try{
-		let name = $('#nameId').val();
-		let form = new FormData(document.getElementById('userForm'));
+	// TODO: Исправить error res.json во всех методах
+	save(cb){
+		let json = JSON.stringify(this);
 
-			//FormData-->JSON
-			var object = {};
-			form.forEach(function(value, key){
-			    object[key] = value;
-			});
-			var json = JSON.stringify(object);
-
-		let res = await fetch(`http://192.168.3.121:3000/users`, {method: "POST", body: json, headers: myHeaders});
-		let data = await res.json();
-		human.id = data.id;
-		human.name = data.name;
-	}catch(err){
-		console.log('User not created');
+		fetch(`http://localhost:3000/users`, {method: "POST", body: json, headers: myHeaders})
+		.then(res => res.json())
+		.then(res => {
+			cb(null, res);
+		})
+		.catch((err) => {
+			cb(err);
+		});
 	}
-}
 
-async function onSetScoreUser(){
-	try{
-		let sc = parseInt($('#score b').text());
-		let us = human.id;
-		
+	saveScore(score, cb){
 		let json = {
-			'user_id': us,
-			'score': sc
+			'user_id': this.id,
+			'score': score
 		}
 		json = JSON.stringify(json);
-		let res = await fetch(`http://192.168.3.121:3000/scores`, {method: "POST", body: json, headers: myHeaders});
-		let data = await res.json();
-	}catch(err){
-		console.log(err);
+		fetch(`http://localhost:3000/scores`, {method: "POST", body: json, headers: myHeaders})
+		.then( res => res.json() )
+		.then( res => cb(null, res) )
+		.catch( err => cb(err) );
+	}
+
+	getScore(cb){
+		fetch(`http://localhost:3000/scores/${this.id}`, {headers: myHeaders})
+		.then( res => res.json() )
+		.then( res => cb(null, res) )
+		.catch( err => cb(err) );
+	}
+
+	static getByName(name, cb){
+		fetch(`http://localhost:3000/users/filter/${name}`)
+		.then(res => res.json())
+		.then(res => {
+			cb(null, res);
+		})
+		.catch((err) => {
+			cb(err);
+		});
 	}
 }
 
-async function onGetScoreUser(userId){
-	try{
-		let res = await fetch(`http://192.168.3.121:3000/scores/${userId}`, {headers: myHeaders});
-		let data = await res.json();
-		$('.scores table').empty();
-		for(let i=0; i<data.length; i++){
-			$('.scores table').append(`
-				<tr>
-					<td>${data[i].score}</td>
-				</tr>	
-			`);
-		}
-	}catch(err){
-		console.log(err);
-	}
-}
+
+
+
 
 
 
@@ -113,8 +100,25 @@ window.onload = function(){
 			clearInterval(timerFish);
 			clearInterval(timeoutFish);
 			the_end = 1;
-			onSetScoreUser();
-			onGetScoreUser(human.id);
+
+			let sc = parseInt($('#score b').text());
+			human.saveScore(sc, (err, res) => {
+				if (err) console.error(err);
+			});
+
+			human.getScore((err, res) => {
+				if (err) console.error(err);
+
+				$('.scores table').empty();
+				for(let i = 0; i < res.length; i++){
+					$('.scores table').append(`
+						<tr>
+							<td>${res[i].score}</td>
+						</tr>	
+					`);
+				}
+			});
+
 			$('.fish').css({'display': 'none'});
 			$('.score_box').css({'display': 'none'});
 			$('.end_game').css({'display': 'block'});
@@ -138,7 +142,22 @@ window.onload = function(){
 let the_end = 0;
 
 function startGame(r){
-	onGetUserByName();
+
+	let name = $('#nameId').val();
+	
+	User.getByName(name, (err, user) => {
+		if (err) {
+			user = new User( {'name': name} );
+			user.save( (err, user) => {
+				if (err) console.error(err);
+				human = new User(user);
+			});
+		}
+		if (user) {
+			human = new User(user);
+		}
+	});
+
 	$('.armor').css({'display': 'none'});
 	$('.score_box').css({'display': 'block'});
 	the_end = 0;
