@@ -1,4 +1,6 @@
 let human;
+let maxFish = 7;
+let arrFishes = [];
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -55,21 +57,67 @@ class User{
 	}
 }
 
+class Fish{
+	constructor(obj){
+		for(let key in obj){
+			this[key] = obj[key];
+		}
+		// init render
+		$('.aquarium').append(`
+			<p class="fish ${this.name}" style="top: ${this.styleTop}px; left: ${this.styleLeft}px;"></p>
+		`);
+	}
 
+	moveTo(styleLeft, styleTop){
+		let ang = this._getAngle(styleLeft, styleTop);
+		// Поворот
+		$('.' + this.name).rotate({animateTo: ang, duration: 1000, callback: function(){
+			$(this).animate({'top': styleTop, 'left': styleLeft}, 1000);
+		}});
+		// Обновляем координаты рыбки
+		this.styleTop = styleTop;
+		this.styleLeft = styleLeft;
+	}
+	
+	moveRand(){
+		let fY = Math.round(Math.random()*((aH-100-2-30)-0)+0);
+		let fX = Math.round(Math.random()*((aW-100-2-30)-0)+0);
 
+		this.moveTo(fX, fY);
+	}
 
+	_getAngle(x, y){
+		let top = this.styleTop;
+		let left = this.styleLeft;
 
+		let deg;
 
+		if ((y < top)&&(x < left)){
+			deg = 180 - (Math.atan2(Math.abs(left-x), Math.abs(top-y)) * 180) / Math.PI
+		}
+		if ((y < top)&&(x >= left)){
+			deg = (Math.atan2(Math.abs(left-x), Math.abs(top-y)) * 180) / Math.PI - 180
+		}
+		if ((y >= top)&&(x < left)){
+			deg = (Math.atan2(Math.abs(left-x), Math.abs(top-y)) * 180) / Math.PI
+		}
+		if ((y >= top)&&(x >= left)){
+			deg = -(Math.atan2(Math.abs(left-x), Math.abs(top-y)) * 180) / Math.PI
+		}
+		deg-=90;
+
+		return deg;
+	}
+}
 
 let maxBubble = 10;
 let i = 0;
-let j = 0;
 let rX;
 let dB;
+// Размеры окна
 let aH;
 let aW;
 
-let startBox;
 let timerBubble;
 let timerFish;
 
@@ -77,25 +125,19 @@ let score = 0;
 let clicks = 10;
 
 
-let f1;
-let f2;
-let f3;
-
 window.onload = function(){
-	startBox = $('.start');
-	f1 = $('.f1');
-	f2 = $('.f2');
-	f3 = $('.f3');
-	f4 = $('.f4');
-	f5 = $('.f5');
-	f6 = $('.f6');
-	f7 = $('.f7');
+	// Размеры окна
+	let aqua = $('.aquarium');
+	aH = aqua.height();
+	aW = aqua.width();
 
 	let timeoutFish;
+
 	$('.null').click(function(){
 		clicks--;
 		$('#available_clicks').text('Clicks: ' + clicks);
 		if(clicks <= 0){
+
 			clearInterval(timerBubble);
 			clearInterval(timerFish);
 			clearInterval(timeoutFish);
@@ -125,11 +167,20 @@ window.onload = function(){
 			$('#final_score').text('Your score: ' + score);
 		}
 	});
+
+	// Массив с рыбками
+	for(let i = 0; i < maxFish; i++){
+		arrFishes.push(new Fish({name: `f${i}`, styleLeft: 10 * i, styleTop: 10 * i}));
+	}
+
+	// Вешаем клики на рыбок
 	$('.fish').click(function(e){
 		score++;
 		$('#score b').text(score);
 		let curFish = e.currentTarget.classList[1];
 		$('.' + curFish).css({'display': 'none'});
+
+
 		timeoutFish = setInterval(function(){
 
 				if(the_end == 0){
@@ -138,13 +189,14 @@ window.onload = function(){
 
 		}, 5000);
 	});
+
 }
 let the_end = 0;
 
 function startGame(r){
 
+	// Получаем юзера
 	let name = $('#nameId').val();
-	
 	User.getByName(name, (err, user) => {
 		if (err) {
 			user = new User( {'name': name} );
@@ -158,8 +210,10 @@ function startGame(r){
 		}
 	});
 
+	// Игровой интерфейс вкл
 	$('.armor').css({'display': 'none'});
 	$('.score_box').css({'display': 'block'});
+
 	the_end = 0;
 	
 
@@ -169,9 +223,7 @@ function startGame(r){
 		$('#available_clicks').text('Clicks: ' + clicks);
 		$('#score b').text(score);
 	}
-	let aqua = $('.aquarium');
-	aH = aqua.height();
-	aW = aqua.width();
+
 	//console.log(aH);
 	$('.start').css({'display': 'none'});
 	$('.end_game').css({'display': 'none'});
@@ -197,68 +249,13 @@ function startGame(r){
 
 	}, 1000);
 
+
 	$('.fish').css({'display': 'block'});
 
-
+	// Таймер для рыбок
 	timerFish = setInterval(function(){
-
-		let fY = Math.round(Math.random()*((aH-100-2)-0)+0);
-		let fX = Math.round(Math.random()*((aW-100-2)-0)+0);
-
-		let styleTop = fY;
-		let styleLeft = fX;
-
-		moveFish(f1, styleTop, styleLeft);
-		moveFish(f2, styleTop, styleLeft);
-		moveFish(f3, styleTop, styleLeft);
-		moveFish(f4, styleTop, styleLeft);
-		moveFish(f5, styleTop, styleLeft);
-		moveFish(f6, styleTop, styleLeft);
-		moveFish(f7, styleTop, styleLeft);
-
-		
-		j++;
+		for (let i = 0; i < arrFishes.length; i++) {
+			arrFishes[i].moveRand();
+		}
 	}, 2000);
-}
-
-function moveFish(fish, styleTop, styleLeft){
-	let lineY = Math.round(Math.random()*(styleTop-0)+0);
-	let lineX = Math.round(Math.random()*(styleLeft-0)+0);
-
-	let ang = getAngle(fish, lineY, lineX);
-
-	fish.rotate({animateTo: ang, duration: 1000, callback: function(){
-		$(this).animate({'top': lineY, 'left': lineX}, 1000);
-	}});
-}
-
-function getAngle(item, avTop, avLeft){
-	let angle = 0;
-
-	let top = item.css('top');
-	let left = item.css('left');
-
-	top = top.replace('px', '');
-	left = left.replace('px', '');
-
-	top = Number(top);
-	left = Number(left);
-
-	let deg;
-
-	if ((avTop < top)&&(avLeft < left)){
-		deg = 180 - (Math.atan2(Math.abs(left-avLeft), Math.abs(top-avTop)) * 180) / Math.PI
-	}
-	if ((avTop < top)&&(avLeft >= left)){
-		deg = (Math.atan2(Math.abs(left-avLeft), Math.abs(top-avTop)) * 180) / Math.PI - 180
-	}
-	if ((avTop >= top)&&(avLeft < left)){
-		deg = (Math.atan2(Math.abs(left-avLeft), Math.abs(top-avTop)) * 180) / Math.PI
-	}
-	if ((avTop >= top)&&(avLeft >= left)){
-		deg = -(Math.atan2(Math.abs(left-avLeft), Math.abs(top-avTop)) * 180) / Math.PI
-	}
-	deg-=90;
-
-	return deg;
 }
