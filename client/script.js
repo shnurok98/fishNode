@@ -2,6 +2,9 @@ let human;
 let maxFish = 7;
 let arrFishes = [];
 
+let score = 0;
+let clicks = 10;
+
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
@@ -121,9 +124,6 @@ let aW;
 let timerBubble;
 let timerFish;
 
-let score = 0;
-let clicks = 10;
-
 
 window.onload = function(){
 	// Размеры окна
@@ -136,18 +136,23 @@ window.onload = function(){
 	$('.null').click(function(){
 		clicks--;
 		$('#available_clicks').text('Clicks: ' + clicks);
+
 		if(clicks <= 0){
 
 			clearInterval(timerBubble);
 			clearInterval(timerFish);
 			clearInterval(timeoutFish);
+
+			// Обозначаем конец игры
 			the_end = 1;
 
+			// Сохраняем счет игрока
 			let sc = parseInt($('#score b').text());
 			human.saveScore(sc, (err, res) => {
 				if (err) console.error(err);
 			});
 
+			// Получаем его статистику
 			human.getScore((err, res) => {
 				if (err) console.error(err);
 
@@ -161,6 +166,7 @@ window.onload = function(){
 				}
 			});
 
+			// Скрываем интерфейс
 			$('.fish').css({'display': 'none'});
 			$('.score_box').css({'display': 'none'});
 			$('.end_game').css({'display': 'block'});
@@ -168,7 +174,7 @@ window.onload = function(){
 		}
 	});
 
-	// Массив с рыбками
+	// Создаем массив с рыбками
 	for(let i = 0; i < maxFish; i++){
 		arrFishes.push(new Fish({name: `f${i}`, styleLeft: 10 * i, styleTop: 10 * i}));
 	}
@@ -180,18 +186,16 @@ window.onload = function(){
 		let curFish = e.currentTarget.classList[1];
 		$('.' + curFish).css({'display': 'none'});
 
-
+		// Обозначаем возвращение рыбки
 		timeoutFish = setInterval(function(){
-
-				if(the_end == 0){
-					$('.' + curFish).css({'display': 'inline-block'});
-				}
-
+			if(the_end == 0){
+				$('.' + curFish).css({'display': 'inline-block'});
+			}
 		}, 5000);
 	});
 
 }
-let the_end = 0;
+let the_end = 0; // Для того чтобы не возвращать рыбок в завершенную игру
 
 function startGame(r){
 
@@ -227,6 +231,7 @@ function startGame(r){
 	//console.log(aH);
 	$('.start').css({'display': 'none'});
 	$('.end_game').css({'display': 'none'});
+
 	timerBubble = setInterval(function(){
 		if(i < maxBubble){
 			dB = Math.round(Math.random()*(80-10)+10);
@@ -248,7 +253,6 @@ function startGame(r){
 		}
 
 	}, 1000);
-
 
 	$('.fish').css({'display': 'block'});
 
