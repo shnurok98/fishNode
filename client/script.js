@@ -74,9 +74,9 @@ class Fish{
 	moveTo(styleLeft, styleTop){
 		let ang = this._getAngle(styleLeft, styleTop);
 		// Поворот
-		$('.' + this.name).rotate({animateTo: ang, duration: 1000, callback: function(){
-			$(this).animate({'top': styleTop, 'left': styleLeft}, 1000);
-		}});
+		$('.' + this.name).css({ 'transform': 'rotate(' + ang + 'deg)', 'transition-duration': '1s' });
+		$('.' + this.name).animate({'top': styleTop, 'left': styleLeft}, 1000);
+		
 		// Обновляем координаты рыбки
 		this.styleTop = styleTop;
 		this.styleLeft = styleLeft;
