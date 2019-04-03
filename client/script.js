@@ -124,10 +124,12 @@ let aW;
 let timerBubble;
 let timerFish;
 
+// Блок аквариума
+let aqua;
 
 window.onload = function(){
 	// Размеры окна
-	let aqua = $('.aquarium');
+	aqua = $('.aquarium');
 	aH = aqua.height();
 	aW = aqua.width();
 
@@ -262,4 +264,26 @@ function startGame(r){
 			arrFishes[i].moveRand();
 		}
 	}, 2000);
+}
+
+
+function onShowSettings(){
+	aqua.append(`<div id="settings">
+			<form>
+				<label>Кол-во рыбок: <input type="number" min="0" value="7"name="maxFish"></br></label>
+				<label>Кол-во пузырей: <input type="number" min="0" value="10"name="maxBubble"></br></label>
+				<label>Кол-во кликов: <input type="number" min="0" value="10"name="maxClicks"></br></label>
+			</form>
+			<button onclick="onAcceptSettings()">OK</button>
+		</div>`);
+	// Добавляем в body (вверх) абсолютный блок с настройками
+	// Дополняем блок функционалом
+}
+
+function onAcceptSettings(){
+	// Обновляем данные
+}
+
+function onHideSettings(){
+	// Закрываем окно настроек
 }
