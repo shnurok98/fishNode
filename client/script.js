@@ -3,6 +3,7 @@ let maxFish = 7;
 let arrFishes = [];
 
 let score = 0;
+let maxClicks = 10;
 let clicks = 10;
 
 var myHeaders = new Headers();
@@ -173,28 +174,33 @@ window.onload = function(){
 			$('.score_box').css({'display': 'none'});
 			$('.end_game').css({'display': 'block'});
 			$('#final_score').text('Your score: ' + score);
+
+			// Удаляем рыбок
+			$('.fish').remove();
+			arrFishes = [];
 		}
 	});
 
-	// Создаем массив с рыбками
-	for(let i = 0; i < maxFish; i++){
-		arrFishes.push(new Fish({name: `f${i}`, styleLeft: 10 * i, styleTop: 10 * i}));
-	}
+	// TODO: проверить и удалить
+	// // Создаем массив с рыбками
+	// for(let i = 0; i < maxFish; i++){
+	// 	arrFishes.push(new Fish({name: `f${i}`, styleLeft: 10 * i, styleTop: 10 * i}));
+	// }
 
-	// Вешаем клики на рыбок
-	$('.fish').click(function(e){
-		score++;
-		$('#score b').text(score);
-		let curFish = e.currentTarget.classList[1];
-		$('.' + curFish).css({'display': 'none'});
+	// // Вешаем клики на рыбок
+	// $('.fish').click(function(e){
+	// 	score++;
+	// 	$('#score b').text(score);
+	// 	let curFish = e.currentTarget.classList[1];
+	// 	$('.' + curFish).css({'display': 'none'});
 
-		// Обозначаем возвращение рыбки
-		timeoutFish = setInterval(function(){
-			if(the_end == 0){
-				$('.' + curFish).css({'display': 'inline-block'});
-			}
-		}, 5000);
-	});
+	// 	// Обозначаем возвращение рыбки
+	// 	timeoutFish = setInterval(function(){
+	// 		if(the_end == 0){
+	// 			$('.' + curFish).css({'display': 'inline-block'});
+	// 		}
+	// 	}, 5000);
+	// });
 
 }
 let the_end = 0; // Для того чтобы не возвращать рыбок в завершенную игру
@@ -223,17 +229,40 @@ function startGame(r){
 	the_end = 0;
 	
 
-	if(r == 0){
-		clicks = 10;
+	// if(r == 0){
+		clicks = maxClicks;
 		score = 0;
 		$('#available_clicks').text('Clicks: ' + clicks);
 		$('#score b').text(score);
-	}
+	// }
 
 	//console.log(aH);
 	$('.start').css({'display': 'none'});
 	$('.end_game').css({'display': 'none'});
 
+
+	// Создаем массив с рыбками
+	for(let i = 0; i < maxFish; i++){
+		arrFishes.push(new Fish({name: `f${i}`, styleLeft: 10 * i, styleTop: 10 * i}));
+	}
+
+	// Вешаем клики на рыбок
+	$('.fish').click(function(e){
+		score++;
+		$('#score b').text(score);
+		let curFish = e.currentTarget.classList[1];
+		$('.' + curFish).css({'display': 'none'});
+
+		// Обозначаем возвращение рыбки
+		timeoutFish = setInterval(function(){
+			if(the_end == 0){
+				$('.' + curFish).css({'display': 'inline-block'});
+			}
+		}, 5000);
+	});
+
+
+	// TODO: fix maxBubble
 	timerBubble = setInterval(function(){
 		if(i < maxBubble){
 			dB = Math.round(Math.random()*(80-10)+10);
@@ -269,21 +298,22 @@ function startGame(r){
 
 function onShowSettings(){
 	aqua.append(`<div id="settings">
-			<form>
-				<label>Кол-во рыбок: <input type="number" min="0" value="7"name="maxFish"></br></label>
-				<label>Кол-во пузырей: <input type="number" min="0" value="10"name="maxBubble"></br></label>
-				<label>Кол-во кликов: <input type="number" min="0" value="10"name="maxClicks"></br></label>
+			<form name="formSettings">
+				<label>Кол-во рыбок: <input type="number" min="0" value="7" name="maxFish"></br></label>
+				<label>Кол-во пузырей: <input type="number" min="0" value="10" name="maxBubble"></br></label>
+				<label>Кол-во кликов: <input type="number" min="0" value="10" name="maxClicks"></br></label>
 			</form>
 			<button onclick="onAcceptSettings()">OK</button>
 		</div>`);
-	// Добавляем в body (вверх) абсолютный блок с настройками
-	// Дополняем блок функционалом
 }
 
 function onAcceptSettings(){
-	// Обновляем данные
+	maxFish = Number(document.forms.formSettings.maxFish.value);
+	maxBubble = Number(document.forms.formSettings.maxBubble.value);
+	maxClicks = Number(document.forms.formSettings.maxClicks.value);
+	onHideSettings();
 }
 
 function onHideSettings(){
-	// Закрываем окно настроек
+	$('#settings').remove();
 }
