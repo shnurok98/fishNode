@@ -213,8 +213,6 @@ function startGame(r){
 
 	the_end = 0;
 	
-
-
 		clicks = settings.maxClicks;
 		score = 0;
 		$('#available_clicks').text('Clicks: ' + clicks);
