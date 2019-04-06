@@ -149,9 +149,6 @@ window.onload = function(){
 			clearInterval(timerFish);
 			clearInterval(timeoutFish);
 
-			// Обозначаем конец игры
-			the_end = 1;
-
 			// Сохраняем счет игрока
 			let sc = parseInt($('#score b').text());
 			human.saveScore(sc, (err, res) => {
@@ -186,11 +183,10 @@ window.onload = function(){
 
 }
 
-// TODO: fix the_end and mistic r
+// TODO: Вывести кнопку настроек на end_game
+// TODO: Улучшить интерфейс
 
-let the_end = 0; // Для того чтобы не возвращать рыбок в завершенную игру
-
-function startGame(r){
+function startGame(){
 
 	// Получаем юзера
 	let name = $('#nameId').val();
@@ -211,15 +207,13 @@ function startGame(r){
 	$('.armor').css({'display': 'none'});
 	$('.score_box').css({'display': 'block'});
 
-	the_end = 0;
-	
-		clicks = settings.maxClicks;
-		score = 0;
-		$('#available_clicks').text('Clicks: ' + clicks);
-		$('#score b').text(score);
+
+	clicks = settings.maxClicks;
+	score = 0;
+	$('#available_clicks').text('Clicks: ' + clicks);
+	$('#score b').text(score);
 
 
-	//console.log(aH);
 	$('.start').css({'display': 'none'});
 	$('.end_game').css({'display': 'none'});
 
@@ -238,9 +232,7 @@ function startGame(r){
 
 		// Обозначаем возвращение рыбки
 		timeoutFish = setInterval(function(){
-			if(the_end == 0){
-				$('.' + curFish).css({'display': 'inline-block'});
-			}
+			$('.' + curFish).css({'display': 'inline-block'});
 		}, 5000);
 	});
 
