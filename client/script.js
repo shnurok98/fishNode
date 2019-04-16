@@ -183,9 +183,6 @@ window.onload = function(){
 
 }
 
-// TODO: Вывести кнопку настроек на end_game
-// TODO: Улучшить интерфейс
-
 function startGame(){
 
 	// Получаем юзера
