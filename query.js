@@ -14,19 +14,6 @@ const connection = require('./db');
 	}
 })();
 
-// (async function createTable(){
-// 	try{
-// 		let res = connection.manyOrNone(`
-// 		SELECT 2+2`);
-// 		console.log('query success');
-// 		console.log(res);
-// 	}catch(err){
-// 		console.log(err);
-// 	}
-// })();
-
-
-
 (async function createTable(){
 	try{
 		let res = connection.none(`

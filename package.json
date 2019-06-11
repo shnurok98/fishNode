@@ -1,17 +1,16 @@
 {
-  "name": "game",
+  "name": "fish-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Game",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Alexander Buravov (shnurok)",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
-    "mysql": "^2.15.0",
     "pg-promise": "^8.4.4"
   }
 }

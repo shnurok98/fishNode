@@ -3,7 +3,6 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const connection = require('../db');
 
-
 router.get('/', async (req, res) => {
 	try{
 		let rows = connection.manyOrNone(`
@@ -37,27 +36,5 @@ router.post('/', async (req, res) => {
 		console.log(err);
 	}
 });
-/*
-router.put('/:id', async (req, res) => {
-	try{
-		let rows = await connection.none(`
-		UPDATE scores SET score = $1 WHERE id = $2;
-		`, [req.body.name, +req.params.id]);
-		res.sendStatus(200);
-	}catch(err){
-		console.log(err);
-	}
-});
 
-router.delete('/:id', async (req, res) => {
-	try{
-		let rows = await connection.none(`
-		DELETE FROM scores WHERE id = $1;
-		`, [+req.params.id]);
-		res.sendStatus(200);
-	}catch(err){
-		console.log(err);
-	}
-});
-*/
 module.exports = router;
